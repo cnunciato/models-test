@@ -1,0 +1,18 @@
+steps:
+  - label: ":claude: Do agent things"
+    command: |
+      npm install -g @anthropic-ai/claude-code
+
+      export ANTHROPIC_BASE_URL=https://agent.buildkite.com/v3/ai/anthropic
+      export ANTHROPIC_API_KEY=$$BUILDKITE_AGENT_ACCESS_TOKEN
+      claude -p "Hi, Claude!"
+
+      export PATH="$$HOME/.local/bin:$$PATH"
+      export GOOSE_PROVIDER="anthropic"
+      # export GOOSE_MODEL="claude-sonnet-4-20250514"
+      # export GOOSE_PROVIDER__TYPE="anthropic"
+      export GOOSE_PROVIDER__HOST="$$ANTHROPIC_BASE_URL"
+      export GOOSE_PROVIDER__API_KEY="$$ANTHROPIC_API_KEY"
+      curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
+
+      goose run --no-session --text "Hi, Goose!"
